@@ -65,12 +65,12 @@ Seluruh data pemesanan dikelola dalam sebuah **Array of Struct** (`Booking dafta
 Proyek ini disusun oleh **Kelompok 1**:
 
 | No | Nama Anggota | Peran | Tanggung Jawab Utama |
-|---|---|---|---|
-| 1 | **Malik Irhamsyah Perani** | Koordinator / Anggota 1 | Analisis masalah, penyusunan IPO & Pseudocode, perancangan Menu Utama konsol, dan integrasi seluruh modul C++. |
-| 2 | **Muhammad Fahri Ramadhan** | Anggota 2 | Deklarasi `struct` & `array of struct`, fungsi Input/Output data, percabangan `IF-ELSE`, dan perulangan. |
-| 3 | **Beverly Marsya Yufuai** | Anggota 3 | Modularisasi fungsi, fungsi perhitungan statistik (Total, Rata-rata, Min/Max), dan implementasi **Fungsi Rekursif**. |
-| 4 | **Faiz Falah Fauzian** | Anggota 4 | Implementasi algoritma *Sorting* & *Searching* manual tanpa STL, pengujian fungsi, serta *debugging*. |
-| 5 | **Muhammad Faiz Harry Saputra** | Anggota 5 | Penyusunan laporan PDF, penyusunan 5 *test case*, *screenshot* pengujian, dan penyiapan berkas akhir. |
+|---|---|---|---|  
+| 1 | **Faiz Falah Fauzian** | Koordinator / Anggota 1 | Analisis masalah, penyusunan IPO & Pseudocode, perancangan Menu Utama konsol, dan integrasi seluruh modul C++. |
+| 2 | **Muhammad Faiz Harry Saputra** | Anggota 2 | Deklarasi `struct` & `array of struct`, fungsi Input/Output data, percabangan `IF-ELSE`, dan perulangan. |
+| 3 | **Malik Irhamsyah Perani** | Anggota 3 | Modularisasi fungsi, fungsi perhitungan statistik (Total, Rata-rata, Min/Max), dan implementasi **Fungsi Rekursif**. |
+| 4 | **Muhammad Fahri Ramadhan** | Anggota 4 | Implementasi algoritma *Sorting* & *Searching* manual tanpa STL, pengujian fungsi, serta *debugging*. |
+| 5 | **Beverly Marsya Yufuai** | Anggota 5 | Penyusunan laporan PDF, penyusunan 5 *test case*, *screenshot* pengujian, dan penyiapan berkas akhir. |
 
 ---
 
