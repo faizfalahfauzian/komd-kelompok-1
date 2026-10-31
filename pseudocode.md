@@ -1,4 +1,4 @@
-// Declaration //
+    // Declaration //
 
 STRUCTURE Booking 
     idPemesanan : STRING / INTEGER 
@@ -12,7 +12,7 @@ STRUCTURE Booking
   DECLARE daftarPemesanan AS ARRAY OF Booking 
   DECLARE jumlahData AS INTEGER = 0
 
-  // Main Algorithm //
+      // Main Algorithm //
 
 PROGRAM MainMenu 
 BEGIN 
@@ -39,9 +39,8 @@ BEGIN
   UNTIL pilihan == 6 
   END
 
-  // Functions Algorithm //
 
-      // Pengecekan Kapasitas dan Prioritas //
+      //  Fungsi Pengecekan Kapasitas dan Prioritas //
     
   PROCEDURE CekKapasitasDanPrioritas(kapasitas, jumlahPeserta) 
   BEGIN 
@@ -58,7 +57,7 @@ BEGIN
       ENDIF 
   ENDPROCEDURE
 
-      // Hitung Total Durasi (Fungsi Rekursif) //
+      // Fungsi Hitung Total Durasi (Fungsi Rekursif) //
 
   FUNCTION HitungTotalDurasiRekursif(n) RETURNS INTEGER 
   BEGIN 
@@ -71,7 +70,7 @@ BEGIN
       ENDIF 
   ENDFUNCTION
 
-      // Perhitungan Statistik //
+      // Fungsi Perhitungan Statistik //
 
   PROCEDURE HitungStatistik() 
   BEGIN 
@@ -101,7 +100,7 @@ BEGIN
       DISPLAY "Durasi Terendah: ", minDurasi 
   ENDPROCEDURE
 
-        // Sorting Manual (Bubble Sort - Berdasarkan Durasi //
+        // Fungsi Sorting Manual (Bubble Sort - Berdasarkan Durasi) //
 
   PROCEDURE BubbleSortDurasi() 
   BEGIN 
@@ -115,7 +114,7 @@ BEGIN
       DISPLAY "Data berhasil diurutkan berdasarkan durasi." 
   ENDPROCEDURE
 
-      // Searching Manual (Linear Search - ID Pemesanan) //
+      // Fungsi Searching Manual (Linear Search - ID Pemesanan) //
       
 PROCEDURE LinearSearchID(targetID) 
 BEGIN 
