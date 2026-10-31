@@ -155,6 +155,7 @@ smart-campus-booking/
 ├── docs/
 │   └── Laporan_Kelompok_1.pdf  # Laporan lengkap proyek akhir
 │   └── Pseudocode.md  # Pseudocode Program
+│   └── Notes.md  # Catatan-catatan
 └── screenshots/
     ├── menu_utama.png       # Screenshot eksekusi menu utama
     └── test_cases.png       # Screenshot hasil pengujian test case
