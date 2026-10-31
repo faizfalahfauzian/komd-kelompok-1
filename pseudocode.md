@@ -86,10 +86,10 @@ BEGIN
       DECLARE minDurasi AS INTEGER = daftarPemesanan.durasi 
                                                                                                                       //
       FOR i FROM 1 TO jumlahData - 1 DO 
-          IF daftarPemesanan[i].durasi &gt; maxDurasi THEN 
+          IF daftarPemesanan[i].durasi > maxDurasi THEN 
               maxDurasi = daftarPemesanan[i].durasi 
           ENDIF 
-          IF daftarPemesanan[i].durasi &lt; minDurasi THEN 
+          IF daftarPemesanan[i].durasi < minDurasi THEN 
           minDurasi = daftarPemesanan[i].durasi 
           ENDIF 
       ENDFOR 
