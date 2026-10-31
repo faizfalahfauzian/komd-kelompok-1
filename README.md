@@ -5,7 +5,7 @@
 
 ---
 
-## 📋 Daftar Isi
+## Table of Contents
 1. [Tentang Proyek](#-tentang-proyek)
 2. [Fitur Utama](#-fitur-utama)
 3. [Struktur Data Struct](#-struktur-data-struct)
@@ -18,7 +18,7 @@
 
 ---
 
-## 📱 Tentang Proyek
+## Tentang Project
 
 **Smart Campus Room & Study Space Booking Simulator** adalah program berbasis console C++ yang dirancang untuk mengelola, menganalisis, mengurutkan, dan mencari data pemesanan ruang belajar di lingkungan kampus secara terstruktur.
 
@@ -26,7 +26,7 @@ Program ini dibuat untuk memenuhi Tugas Akhir Praktikum Pemrograman dengan mener
 
 ---
 
-## ✨ Fitur Utama
+## Fitur Utama
 
 - **Pengelolaan Data Pemesanan (CRUD Dasar):** Menambah data pemesanan ruang baru dan menampilkan seluruh daftar pemesanan terdaftar secara rapi.
 - **Validasi Kapasitas & Penentuan Prioritas (`IF-ELSE`):** Mengecek apakah jumlah peserta melebihi kapasitas ruangan dan mengklasifikasikan tingkat prioritas pemesanan (misalnya: Prioritas Tinggi untuk kegiatan besar dengan jumlah peserta 20 orang atau lebih).
@@ -40,7 +40,7 @@ Program ini dibuat untuk memenuhi Tugas Akhir Praktikum Pemrograman dengan mener
 
 ---
 
-## 🗂️ Struktur Data Struct
+## Struktur Data Struct
 
 Setiap entitas pemesanan disimpan dalam struktur data `Booking` dengan komponen minimal sebagai berikut:
 
@@ -60,7 +60,7 @@ Seluruh data pemesanan dikelola dalam sebuah **Array of Struct** (`Booking dafta
 
 ---
 
-## 👥 Anggota Kelompok & Pembagian Tugas
+## Anggota Kelompok & Pembagian Tugas
 
 Proyek ini disusun oleh **Kelompok 1**:
 
@@ -74,7 +74,7 @@ Proyek ini disusun oleh **Kelompok 1**:
 
 ---
 
-## ⚙️ Spesifikasi Sistem & Aturan Algoritma
+## Spesifikasi Sistem & Aturan Algoritma
 
 1. **Bahasa Pemrograman:** C++ (Standar C++11 ke atas).
 2. **Antarmuka:** *Console-based Interactive Menu*.
@@ -83,7 +83,7 @@ Proyek ini disusun oleh **Kelompok 1**:
 
 ---
 
-## 💻 Panduan Kompilasi & Jalankan Program
+## Panduan Kompilasi & Jalankan Program
 
 ### Persyaratan
 - Compiler C++ seperti **GCC/g++**, **Clang**, atau **MSVC**.
@@ -111,7 +111,7 @@ Proyek ini disusun oleh **Kelompok 1**:
 
 ---
 
-## 🖥️ Panduan Penggunaan Menu Konsol
+## Panduan Penggunaan Menu Konsol
 
 Tampilan menu utama program berulang hingga pengguna memilih opsi keluar:
 
@@ -132,7 +132,7 @@ Pilih menu (1-7):
 
 ---
 
-## 🧪 Skenario Pengujian Test Cases
+## Skenario Pengujian Test Cases
 
 Program ini diuji dengan minimal **5 Test Case** mencakup kondisi normal dan kondisi batas (*edge/boundary case*):
 
@@ -146,7 +146,7 @@ Program ini diuji dengan minimal **5 Test Case** mencakup kondisi normal dan kon
 
 ---
 
-## 📁 Struktur Repositori
+## Struktur Repositori
 
 ```text
 smart-campus-booking/
@@ -161,5 +161,5 @@ smart-campus-booking/
 
 ---
 
-## 📜 Lisensi & Atribusi
+## Lisensi & Atribusi
 Proyek ini dikembangkan untuk kebutuhan akademis mata kuliah Praktikum Pemrograman di bawah panduan Dosen dan Asisten Praktikum. Seluruh kontribusi anggota kelompok tertera pada tabel kontribusi.
