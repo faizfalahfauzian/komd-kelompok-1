@@ -151,6 +151,60 @@ void linearSearchID(const pemesanan ps[], int jumlahPemesanan, int targetID) {
     cout << "Data tidak ditemukan!\n\n";
 }
 
+int hitungTotalDurasi(pemesanan ps[], int jumlahPemesanan) {
+    if (jumlahPemesanan <= 0) {
+        return 0;
+    }
+    return ps[jumlahPemesanan - 1].durasi + hitungTotalDurasi(ps, jumlahPemesanan - 1);
+}
+
+double hitungRataRataDurasi(pemesanan ps[], int jumlahPemesanan) {
+    if (jumlahPemesanan <= 0) {
+        return 0.0;
+    }
+    return (double)hitungTotalDurasi(ps, jumlahPemesanan) / jumlahPemesanan;
+}
+
+int hitungDurasiTertinggi(pemesanan ps[], int jumlahPemesanan) {
+    if (jumlahPemesanan <= 0) {
+        return 0;
+    }
+    int durasiTertinggi = ps[0].durasi;
+    for (int i = 1; i < jumlahPemesanan; i++) {
+        if (ps[i].durasi > durasiTertinggi) {
+            durasiTertinggi = ps[i].durasi;
+        }
+    }
+    return durasiTertinggi;
+}
+
+int hitungDurasiTerendah(pemesanan ps[], int jumlahPemesanan) {
+    if (jumlahPemesanan <= 0) {
+        return 0;
+    }
+    int durasiTerendah = ps[0].durasi;
+    for (int i = 1; i < jumlahPemesanan; i++) {
+        if (ps[i].durasi < durasiTerendah) {
+            durasiTerendah = ps[i].durasi;
+        }
+    }
+    return durasiTerendah;
+}
+
+void tampilkanStatistik(pemesanan ps[], int jumlahPemesanan) {
+    if (jumlahPemesanan <= 0) {
+        cout << "Belum ada data pemesanan apapun. \n";
+        return;
+    }
+    cout << "================================\n";
+    cout << "Analisis Statistik & Total Durasi\n";
+    cout << "Total Durasi: " << hitungTotalDurasi(ps, jumlahPemesanan) << " Menit." << endl;
+    cout << "Rata Rata Durasi: " << hitungRataRataDurasi(ps, jumlahPemesanan) << " Menit." << endl;
+    cout << "Durasi Tertinggi: " << hitungDurasiTertinggi(ps, jumlahPemesanan) << " Menit." << endl;
+    cout << "Durasi Terendah: " << hitungDurasiTerendah(ps, jumlahPemesanan) << " Menit." << endl;
+    cout << "================================\n";
+}
+
 int main() {
     const int maks = 100;
     pemesanan ps[maks];
@@ -165,6 +219,7 @@ int main() {
         cout << "3. Cari pemesanan berdasarkan ID\n";
         cout << "4. Urutkan Data Pemesanan (Manual Sort)\n";
         cout << "5. Cari Data Pemesanan (Manual Search)\n";
+        cout << "6. Analisis Statistik & Total Durasi (Rekursif)\n";
         cout << "7. Keluar\n";
         cout << "Pilih (1-7): ";
         if (!(cin >> pilihan)) {
@@ -210,6 +265,8 @@ int main() {
             } else {
                 linearSearchID(ps, jumlahPemesanan, targetID);
             }
+        } else if (pilihan == 6) {
+            tampilkanStatistik(ps, jumlahPemesanan);
         } else if (pilihan == 7) {
             cout << "Terima kasih telah menggunakan sistem ini... Jangan lupa untuk memesan lagi yaaa.\n";
         } else if (pilihan != 7) {
