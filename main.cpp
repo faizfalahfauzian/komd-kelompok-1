@@ -101,6 +101,56 @@ void cariPemesanan(const pemesanan ps[], int jumlahPemesanan) {
     }
 }
 
+void tampilkanDaftar(const pemesanan ps[], int jumlahPemesanan) {
+    // tampil daftar pemesanan
+    for (int i = 0; i < jumlahPemesanan; ++i) {
+        cout << "Data ke-" << i + 1 << "\n"
+             << "- ID           : " << ps[i].ID << "\n"
+             << "- Nama pemesan : " << ps[i].namaPemesan << "\n"
+             << "- Ruangan      : " << ps[i].namaruangan << "\n"
+             << "- Anggota      : " << ps[i].jumlahAnggota << "\n"
+             << "- Durasi       : " << ps[i].durasi << " menit\n"
+             << "- Prioritas    : " << ps[i].prioritas << "\n\n";
+    }
+}
+
+void bubbleSortDurasi(pemesanan ps[], int jumlahPemesanan) {
+    // Bubble Sort - urut pemesanan berdasarkan durasi
+    if (jumlahPemesanan == 0) {
+        cout << "Data masih kosong!\n\n";
+        return;
+    }
+
+    for (int i = 0; i < jumlahPemesanan - 1; ++i) {
+        for (int j = 0; j < jumlahPemesanan - i - 1; ++j) {
+            if (ps[j].durasi > ps[j + 1].durasi) {
+                pemesanan temp = ps[j];
+                ps[j] = ps[j + 1];
+                ps[j + 1] = temp;
+            }
+        }
+    }
+
+    cout << "\nData berhasil diurutkan berdasarkan durasi.\n\n";
+    tampilkanDaftar(ps, jumlahPemesanan); 
+}
+
+void linearSearchID(const pemesanan ps[], int jumlahPemesanan, int targetID) {
+    // Linear Search - mencari pemesanan berdasarkan ID
+    for (int i = 0; i < jumlahPemesanan; ++i) {
+        if (ps[i].ID == targetID) {
+            cout << "\nData ditemukan di indeks: " << i << "\n"
+                 << "- ID pemesanan : " << ps[i].ID << "\n"
+                 << "- Nama pemesan : " << ps[i].namaPemesan << "\n"
+                 << "- Nama ruang   : " << ps[i].namaruangan << "\n"
+                 << "- Durasi       : " << ps[i].durasi << " menit\n\n";
+            return;
+        }
+    }
+
+    cout << "Data tidak ditemukan!\n\n";
+}
+
 int main() {
     const int maks = 100;
     pemesanan ps[maks];
@@ -113,8 +163,10 @@ int main() {
         cout << "1. Tambah pemesanan\n";
         cout << "2. Tampilkan semua pemesanan\n";
         cout << "3. Cari pemesanan berdasarkan ID\n";
-        cout << "4. Keluar\n";
-        cout << "Pilih (1-4): ";
+        cout << "4. Urutkan Data Pemesanan (Manual Sort)\n";
+        cout << "5. Cari Data Pemesanan (Manual Search)\n";
+        cout << "7. Keluar\n";
+        cout << "Pilih (1-7): ";
         if (!(cin >> pilihan)) {
             cerr << "Input harus berupa angka.\n";
             return 1;
@@ -147,12 +199,23 @@ int main() {
                 cout << "Pemesanan tidak ditemukan.\n";
             }
         } else if (pilihan == 4) {
+                bubbleSortDurasi(ps, jumlahPemesanan);
+        } else if (pilihan == 5) {
+            int targetID;
+            cout << "Masukkan ID pemesanan: ";
+            if (!(cin >> targetID)) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cerr << "Input ID harus berupa angka!\n\n";
+            } else {
+                linearSearchID(ps, jumlahPemesanan, targetID);
+            }
+        } else if (pilihan == 7) {
             cout << "Terima kasih telah menggunakan sistem ini... Jangan lupa untuk memesan lagi yaaa.\n";
-        }
-        else if (pilihan != 4) {
+        } else if (pilihan != 7) {
             cout << "Pilihan tidak valid.\n";
         }
-    } while (pilihan != 4);
+    } while (pilihan != 7);
 
     return 0;
 }
