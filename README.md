@@ -78,8 +78,8 @@ Compiler C++ yang mendukung C++11 atau lebih baru (misalnya **g++**, **clang++**
 
 ```bash
 # 1. Clone repositori
-git clone https://github.com/<username>/<nama-repo>.git
-cd <nama-repo>
+git clone https://github.com/faizfalahfauzian/komd-kelompok-1.git
+cd komd-kelompok-1
 
 # 2. Compile
 g++ -std=c++11 -Wall -o booking main.cpp
@@ -88,8 +88,6 @@ g++ -std=c++11 -Wall -o booking main.cpp
 ./booking          # Linux / macOS
 booking.exe        # Windows
 ```
-
-> Ganti `<username>` dan `<nama-repo>` sesuai repositori kamu.
 
 ---
 
