@@ -1,167 +1,276 @@
-# Smart Campus Room & Study Space Booking Simulator
+#  Smart Campus Booking System - Tugas Akhir Kelompok 1 Praktikum Pemrograman KOMD
 
-> **Proyek Akhir Praktikum Pemrograman C++ — Kelompok 1**  
-> Aplikasi Konsol C++ untuk Simulator Pemesanan Ruang Belajar & Fasilitas Kampus berbasis Array of Struct, Algoritma Rekursif, Serta Sorting & Searching Manual.
+![C++](https://img.shields.io/badge/C%2B%2B-11%2B-00599C?logo=c%2B%2B&logoColor=white)
+![Type](https://img.shields.io/badge/type-console%20app-lightgrey)
+![Status](https://img.shields.io/badge/status-academic%20project-blue)
 
----
-
-## Table of Contents
-1. [Tentang Proyek](#-tentang-proyek)
-2. [Fitur Utama](#-fitur-utama)
-3. [Struktur Data Struct](#-struktur-data-struct)
-4. [Anggota Kelompok & Pembagian Tugas](#-anggota-kelompok--pembagian-tugas)
-5. [Spesifikasi Sistem & Aturan Algoritma](#-spesifikasi-sistem--aturan-algoritma)
-6. [Panduan Kompilasi & Jalankan Program](#-panduan-kompilasi--jalankan-program)
-7. [Panduan Penggunaan Menu Konsol](#-panduan-penggunaan-menu-konsol)
-8. [Skenario Pengujian Test Cases](#-skenario-pengujian-test-cases)
-9. [Struktur Repositori](#-struktur-repositori)
+Aplikasi **console berbasis C++** untuk mengelola pemesanan ruangan kampus. Sistem memvalidasi kapasitas ruangan, menentukan prioritas pemesanan berdasarkan durasi, membentuk antrian per ruangan, dan menyajikan statistik durasi pemakaian.
 
 ---
 
-## Tentang Project
+##  Table of Contents
 
-**Smart Campus Room & Study Space Booking Simulator** adalah program berbasis console C++ yang dirancang untuk mengelola, menganalisis, mengurutkan, dan mencari data pemesanan ruang belajar di lingkungan kampus secara terstruktur.
-
-Program ini dibuat untuk memenuhi Tugas Akhir Praktikum Pemrograman dengan menerapkan konsep dasar C++ seperti *array of struct*, fungsi modular, logika percabangan, perulangan, fungsi rekursif, serta algoritma pengurutan (*sorting*) dan pencarian (*searching*) tanpa bergantung pada pustaka standar *Standard Template Library (STL)*.
-
----
-
-## Fitur Utama
-
-- **Pengelolaan Data Pemesanan (CRUD Dasar):** Menambah data pemesanan ruang baru dan menampilkan seluruh daftar pemesanan terdaftar secara rapi.
-- **Validasi Kapasitas & Penentuan Prioritas (`IF-ELSE`):** Mengecek apakah jumlah peserta melebihi kapasitas ruangan dan mengklasifikasikan tingkat prioritas pemesanan (misalnya: Prioritas Tinggi untuk kegiatan besar dengan jumlah peserta 20 orang atau lebih).
-- **Analisis & Perhitungan Statistik:**
-  - Menghitung **Total Durasi** pemesanan menggunakan **Fungsi Rekursif**.
-  - Menghitung **Rata-rata Durasi** pemesanan seluruh ruang.
-  - Menentukan pemesanan dengan **Durasi Terpanjang (Maksimum)** dan **Durasi Terpendek (Minimum)**.
-- **Pengurutan Data Manual (Manual Sorting):** Mengurutkan daftar pemesanan berdasarkan **Durasi Pemesanan** atau **ID Pemesanan** menggunakan algoritma *Bubble Sort* atau *Selection Sort* tanpa fungsi STL.
-- **Pencarian Data Manual (Manual Searching):** Mencari pemesanan spesifik berdasarkan **ID Pemesanan** atau **Nama Ruang** menggunakan algoritma *Linear Search* atau *Binary Search*.
-- **Deteksi Fitur Tantangan (Edge Cases):** Mendeteksi dan memberikan peringatan otomatis jika terdapat permintaan pemesanan yang melebihi kapasitas maksimum ruang (*overcapacity*).
+- [Fitur](#-fitur)
+- [Aturan Sistem](#-aturan-sistem)
+- [Cara Menjalankan](#-cara-menjalankan)
+- [Contoh Penggunaan](#-contoh-penggunaan)
+- [Struktur Proyek](#-struktur-proyek)
+- [Konsep & Algoritma](#-konsep--algoritma)
+- [Keterbatasan](#-keterbatasan)
+- [Pengembangan Selanjutnya](#-pengembangan-selanjutnya)
+- [Dokumentasi Tambahan](#-dokumentasi-tambahan)
+- [Pembuat](#-pembuat)
 
 ---
 
-## Struktur Data Struct
+##  Features
 
-Setiap entitas pemesanan disimpan dalam struktur data `Booking` dengan komponen minimal sebagai berikut:
+| Menu | Fitur | Keterangan |
+|:---:|---|---|
+| 1 | **Tambah pemesanan** | Input nama, ruangan, jumlah anggota, durasi, dan keperluan. ID dibuat otomatis (`00001`, `00002`, …) |
+| 2 | **Tampilkan semua pemesanan** | Menampilkan seluruh pemesanan yang diterima |
+| 3 | **Cari pemesanan** | Pencarian berdasarkan ID menggunakan *linear search* |
+| 4 | **Urutkan antrian per ruangan** | Pengurutan dengan *bubble sort*: ruangan → prioritas → waktu pendaftaran |
+| 5 | **Statistik & total durasi** | Total (rekursif), rata-rata, tertinggi, dan terendah |
+| 6 | **Data over capacity** | Log percobaan pemesanan yang ditolak karena melebihi kapasitas |
+| 7 | **Keluar** | Menutup program |
 
-```cpp
-struct Booking {
-    string idPemesanan;    // ID unik pemesanan (contoh: "BK001")
-    string namaPemesan;   // Nama mahasiswa atau organisasi pemesan
-    string namaRuang;     // Nama atau nomor ruang belajar (contoh: "RK.201", "Lab-A")
-    int kapasitasRuang;   // Kapasitas maksimal ruangan (orang)
-    int jumlahPeserta;    // Jumlah peserta yang direncanakan (orang)
-    int durasiMenit;      // Durasi pemesanan dalam satuan menit
-    string prioritas;     // Kategori prioritas ("Tinggi" atau "Normal")
-};
+---
+
+##  System Rules
+
+### Daftar Ruangan
+
+| No | Ruangan | Kapasitas |
+|:---:|---|:---:|
+| 1 | Ruang Diskusi 1 | 10 |
+| 2 | Ruang Diskusi 2 | 20 |
+| 3 | Ruang Diskusi 3 | 25 |
+| 4 | Ruang Creative 1 | 35 |
+| 5 | Aula Utama | 100 |
+| 6 | Ruang Creative 2 | 40 |
+| 7 | Ruang Rapat | 30 |
+
+### Prioritas Berdasarkan Durasi
+
+| Durasi | Prioritas |
+|---|---|
+| kurang dari 20 menit | Rendah |
+| 20 – 60 menit | Sedang |
+| lebih dari 60 menit | Tinggi |
+
+### Aturan Lainnya
+
+- Jika **jumlah anggota > kapasitas ruangan**, pemesanan **ditolak** dan dicatat di log *over capacity* dengan ID berawalan `OV-` (mis. `OV-00001`).
+- Pemesanan yang ditolak **tidak** memakai nomor ID pemesanan resmi.
+- Kapasitas penyimpanan maksimum: **100** pemesanan diterima dan **100** log over capacity.
+- Urutan antrian per ruangan: **prioritas lebih tinggi dahulu**; jika prioritas sama, **ID lebih kecil (mendaftar lebih awal) dahulu**.
+
+---
+
+## How to Run
+
+### Prasyarat
+
+Compiler C++ yang mendukung C++11 atau lebih baru (misalnya **g++**, **clang++**, atau MinGW di Windows).
+
+### Compile & Run
+
+```bash
+# 1. Clone repositori
+git clone https://github.com/<username>/<nama-repo>.git
+cd <nama-repo>
+
+# 2. Compile
+g++ -std=c++11 -Wall -o booking main.cpp
+
+# 3. Jalankan
+./booking          # Linux / macOS
+booking.exe        # Windows
 ```
 
-Seluruh data pemesanan dikelola dalam sebuah **Array of Struct** (`Booking daftarPemesanan[MAX_DATA]`).
+> Ganti `<username>` dan `<nama-repo>` sesuai repositori kamu.
 
 ---
 
-## Anggota Kelompok & Pembagian Tugas
+##  Contoh Penggunaan
 
-Proyek ini disusun oleh **Kelompok 1**:
+### Menu utama
 
-| No | Nama Anggota | Peran | Tanggung Jawab Utama | 
-|---|---|---|---|  
-| 1 | **Faiz Falah Fauzian** | Koordinator / Anggota 1 | Analisis masalah, penyusunan IPO & Pseudocode, perancangan Menu Utama konsol, dan integrasi seluruh modul C++. |
-| 2 | **Muhammad Faiz Harry Saputra** | Anggota 2 | Deklarasi `struct` & `array of struct`, fungsi Input/Output data, percabangan `IF-ELSE`, dan perulangan. |
-| 3 | **Muhammad Fahri Ramadhan** | Anggota 3 | Modularisasi fungsi, fungsi perhitungan statistik (Total, Rata-rata, Min/Max), dan implementasi **Fungsi Rekursif**. |
-| 4 | **Malik Irhamsyah Perani** | Anggota 4 | Implementasi algoritma *Sorting* & *Searching* manual tanpa STL, pengujian fungsi, serta *debugging*. |
-| 5 | **Beverly Marsya Yufuai** | Anggota 5 | Penyusunan laporan PDF, penyusunan 5 *test case*, *screenshot* pengujian, dan penyiapan berkas akhir. |
+```
+================================
+	SMART CAMPUS BOOKING SYSTEM UGM
+1. Tambah pemesanan
+2. Tampilkan semua pemesanan
+3. Cari Data Pemesanan (Manual Search)
+4. Urutkan Antrian Per Ruangan (Prioritas Tinggi -> Rendah)
+5. Analisis Statistik & Total Durasi (Rekursif)
+6. Tampilkan Data Pemesanan Over Capacity
+7. Keluar
+Pilih (1-7):
+```
 
----
+### Pemesanan berhasil
 
-## Spesifikasi Sistem & Aturan Algoritma
+```
+Pilih (1-7): 1
+Nama Pemesan: Andi
+Pilihan ruangan:
+1. Ruang Diskusi 1 (kapasitas 10)
+2. Ruang Diskusi 2 (kapasitas 20)
+3. Ruang Diskusi 3 (kapasitas 25)
+4. Ruang Creative 1 (kapasitas 35)
+5. Aula Utama (kapasitas 100)
+6. Ruang Creative 2 (kapasitas 40)
+7. Ruang Rapat (kapasitas 30)
+Pilih ruangan (1-7): 3
+Jumlah anggota: 10
+Durasi pemesanan (menit): 30
+Kegunaan/keperluan pemesanan: Diskusi kelompok
+Pesanan diterima. ID pemesanan: 00001 (Kategori Prioritas: Sedang)
+```
 
-1. **Bahasa Pemrograman:** C++ (Standar C++11 ke atas).
-2. **Antarmuka:** *Console-based Interactive Menu*.
-3. **Tanpa Library STL Tambahan:** Algoritma pengurutan (*Bubble/Selection Sort*) dan pencarian (*Linear/Binary Search*) diimplementasikan dari nol tanpa menggunakan pustaka `<algorithm>` STL seperti `std::sort` atau `std::binary_search`.
-4. **Fungsi Rekursif Murni:** Perhitungan total durasi pemesanan memanfaatkan teknik rekursi dengan *base case* yang jelas (mengembalikan 0 jika `n <= 0`, dan menambahkan durasi elemen saat ini dengan pemanggilan rekursif `n-1`).
+### Pemesanan ditolak (over capacity)
 
----
+```
+Pilih ruangan (1-7): 1
+Jumlah anggota: 15
 
-## Panduan Kompilasi & Jalankan Program
+[ERROR] Pesanan ditolak karena jumlah anggota (15) melebihi kapasitas ruangan (10)!
+[INFO] Data percobaan pemesanan over capacity telah dicatat ke sistem.
+```
 
-### Persyaratan
-- Compiler C++ seperti **GCC/g++**, **Clang**, atau **MSVC**.
-- Terminal / Command Prompt / PowerShell.
+### Hasil pengurutan antrian (Menu 4)
 
-### Langkah-Langkah Kompilasi dan Eksekusi
+```
+=== Ruang Diskusi 1 ===
+Antrian ke-1 (ID: 00002)
+- Nama pemesan : Budi
+- Prioritas    : Tinggi (90 menit)
+...
+Antrian ke-2 (ID: 00005)
+- Nama pemesan : Eko
+- Prioritas    : Sedang (45 menit)
+...
+=== Ruang Diskusi 3 ===
+Antrian ke-1 (ID: 00003)
+- Nama pemesan : Citra
+- Prioritas    : Tinggi (120 menit)
+...
+```
 
-1. **Buka Terminal di Direktori Proyek**:
-   Arahkan terminal ke folder tempat file `main.cpp` disimpan.
+### Statistik (Menu 5)
 
-2. **Kompilasi Source Code C++**:
-   ```text
-   g++ -std=c++11 -o smart_campus main.cpp
-   ```
-
-3. **Jalankan Program Executable**:
-   - **Linux / macOS**:
-     ```text
-     ./smart_campus
-     ```
-   - **Windows**:
-     ```text
-     smart_campus.exe
-     ```
-
----
-
-## Panduan Penggunaan Menu Konsol
-
-Tampilan menu utama program berulang hingga pengguna memilih opsi keluar:
-
-```text
-===================================================
- SMART CAMPUS ROOM & STUDY SPACE BOOKING SIMULATOR
-===================================================
-1. Tambah Data Pemesanan Ruang
-2. Tampilkan Seluruh Data Pemesanan
-3. Analisis Statistik & Total Durasi (Rekursif)
-4. Urutkan Data Pemesanan (Manual Sort)
-5. Cari Data Pemesanan (Manual Search)
-6. Deteksi Peringatan Overcapacity
-7. Keluar dari Program
-===================================================
-Pilih menu (1-7): 
+```
+Total Durasi: 295 Menit.
+Rata Rata Durasi: 59 Menit.
+Durasi Tertinggi: 120 Menit.
+Durasi Terendah: 10 Menit.
 ```
 
 ---
 
-## Skenario Pengujian Test Cases
+##  Struktur Proyek
 
-Program ini diuji dengan minimal **5 Test Case** mencakup kondisi normal dan kondisi batas (*edge/boundary case*):
-
-| ID Test | Deskripsi Skenario | Input Khusus | Ekspektasi Output |
-|---|---|---|---|
-| **TC01** | Input Data Normal | Ruang "RK.101", Kapasitas 10, Peserta 5, Durasi 60m | Data berhasil disimpan, status prioritas Normal. |
-| **TC02** | Input Data Kegiatan Besar | Ruang "Aula Utama", Kapasitas 50, Peserta 35, Durasi 120m | Status prioritas berubah menjadi "Tinggi". |
-| **TC03** | Boundary Case (Overcapacity) | Ruang "Diskusi 2", Kapasitas 4, Peserta 8, Durasi 45m | Program menampilkan peringatan batas kapasitas terlampaui. |
-| **TC04** | Sorting Manual | Mengurutkan 5 data acak berdasarkan durasi | Data terurut secara ascending berdasarkan durasi (menit). |
-| **TC05** | Searching Manual | Mencari ID Pemesanan "BK003" | Menampilkan rincian data pemesanan BK003 dengan tepat. |
-
----
-
-## Struktur Repositori
-
-```text
-smart-campus-booking/
-├── main.cpp                 # Source code utama aplikasi C++
-├── README.md                # Dokumentasi repositori GitHub ini
-├── docs/
-│   └── Laporan_Kelompok_1.pdf  # Laporan lengkap proyek akhir
-│   └── Pseudocode.md  # Pseudocode Program
-│   └── Notes.md  # Catatan-catatan
-└── screenshots/
-    ├── menu_utama.png       # Screenshot eksekusi menu utama
-    └── test_cases.png       # Screenshot hasil pengujian test case
+```
+.
+├── main.cpp              # Seluruh kode program
+├── README.md             # Dokumen ini
+└── docs/
+    ├── mds/
+        ├── 1_pseudocode.md   # Pseudocode 
+        ├── 2_IPO.md          # Input - Process - Output
+        └── 3_Notes.md        # Catatan alur & cara kerja kode
+    └── images/
+    └── reports/
 ```
 
+### Ringkasan Fungsi di `main.cpp`
+
+| Fungsi | Peran |
+|---|---|
+| `buatIDPemesanan` | Membuat ID 5 digit dengan `stringstream`, `setw`, `setfill` |
+| `tentukanPrioritas` | Mengubah durasi menjadi Rendah / Sedang / Tinggi |
+| `skorPrioritas` | Mengubah teks prioritas menjadi skor 1–3 untuk sorting |
+| `datapemesanan` | Alur input pemesanan + validasi kapasitas + pencatatan over capacity |
+| `sortAntrianPerRuangan` | Bubble sort bertingkat, lalu menampilkan antrian |
+| `tampilkanAntrianPerRuangan` | Mencetak antrian dikelompokkan per ruangan |
+| `linearSearchID` | Mencari pemesanan berdasarkan ID |
+| `hitungTotalDurasi` | Menjumlah durasi secara **rekursif** |
+| `hitungRataRataDurasi`, `hitungDurasiTertinggi`, `hitungDurasiTerendah` | Statistik durasi |
+| `tampilkanStatistik` | Menampilkan seluruh statistik |
+| `tampilkanOverCapacity` | Menampilkan log pemesanan yang ditolak |
+
 ---
 
-## Lisensi & Atribusi
-Proyek ini dikembangkan untuk kebutuhan akademis mata kuliah Praktikum Pemrograman di bawah panduan Dosen dan Asisten Praktikum. Seluruh kontribusi anggota kelompok tertera pada tabel kontribusi.
+##  Concept and Algorithm
+
+| Konsep | Penerapan |
+|---|---|
+| `struct` | `Pemesanan` menyimpan seluruh atribut satu pemesanan |
+| Array of struct | Penyimpanan data pemesanan dan log over capacity |
+| Pass by reference | `int& jumlah`, `int& jumlahOver` agar counter berubah di `main` |
+| `const` parameter | Fungsi tampil/cari tidak mengubah data |
+| Rekursi | `hitungTotalDurasi` |
+| Bubble Sort | Pengurutan 3 tingkat (ruangan, prioritas, ID) |
+| Linear Search | Pencarian ID |
+| Input handling | `cin.clear()` dan `cin.ignore()` untuk input non-angka dan sisa buffer |
+
+### Kompleksitas
+
+| Operasi | Waktu |
+|---|---|
+| Tambah pemesanan | O(1) |
+| Linear search | O(n) |
+| Bubble sort | O(n²) |
+| Total durasi (rekursif) | O(n) waktu, O(n) stack |
+| Rata-rata / maks / min | O(n) |
+
+---
+
+## Constraints
+
+- Data hanya disimpan di memori, sehingga **hilang saat program ditutup**.
+- Input `jumlahAnggota` dan `durasi` **belum divalidasi** (nilai negatif/nol diterima, input huruf dapat mengganggu pembacaan berikutnya).
+- Belum ada tanggal/jam, sehingga antrian hanya berdasarkan prioritas dan belum mendeteksi bentrok jadwal.
+- Belum ada fitur ubah / batalkan pemesanan.
+- Pencarian hanya mencakup pemesanan yang diterima (log `OV-` tidak ikut dicari), dan ID harus diketik lengkap 5 digit.
+- Prioritas hanya ditentukan oleh durasi.
+
+---
+
+## Possible Development
+
+- [ ] Validasi input (angka positif, ulangi sampai valid)
+- [ ] Tambah tanggal & jam, serta pengecekan bentrok jadwal
+- [ ] Simpan dan muat data dari file (`fstream`)
+- [ ] Fitur ubah / batalkan pemesanan
+- [ ] Ganti array statis dengan `std::vector`
+- [ ] Ganti bubble sort dengan `std::sort` + comparator
+- [ ] Pencarian berdasarkan nama pemesan atau ruangan
+
+---
+
+##  Dokumentasi Tambahan
+
+Folder [`docs/`](docs/) berisi dokumentasi proyek:
+
+- [Pseudocode](docs/mds/pseudocode.md)
+- [IPO (Input – Process – Output)](docs/mds/IPO.md)
+- [Catatan alur & cara kerja kode](docs/mds/Notes.md)
+- [Screenshots and Test Cases](docs/images)
+- [Laporan Project](docs/reports)
+
+---
+
+## 👤 Pembuat
+
+**Faiz Falah Fauzian, Muhammad Fahri Ramadhan, Muhammad Faiz Harry Saputra, Beverly Yufuai**
+Mahasiswa Ilmu Komputer, semester 1
+Repository Project: (https://github.com/faizfalahfauzian/komd-kelompok-1)
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dibuat untuk keperluan Mata Kuliah Praktikum Pemrograman kelas KOMD
