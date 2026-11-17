@@ -127,6 +127,7 @@ void tampilkanDaftar(const pemesanan ps[], int jumlahPemesanan) {
     }
 }
 
+<<<<<<< HEAD
 // [BARU] menampilkan data pesanan yang overload capacity
 void tampilkanOverload(const pemesanan ov[], int jumlahOverload) {
     if (jumlahOverload == 0) {
@@ -149,6 +150,8 @@ void tampilkanOverload(const pemesanan ov[], int jumlahOverload) {
     cout << "============================================\n\n";
 }
 
+=======
+>>>>>>> 054cfa1298b427ae94852899a88c6df732933124
 void bubbleSortDurasi(pemesanan ps[], int jumlahPemesanan) {
     // Bubble Sort - urut pemesanan berdasarkan durasi
     if (jumlahPemesanan == 0) {
@@ -257,10 +260,15 @@ int main() {
         cout << "4. Urutkan Data Pemesanan (Manual Sort)\n";
         cout << "5. Cari Data Pemesanan (Manual Search)\n";
         cout << "6. Analisis Statistik & Total Durasi (Rekursif)\n";
+<<<<<<< HEAD
         cout << "7. Data Overload Capacity\n";
         cout << "8. Keluar\n";                   
         cout << "===================================================\n";
         cout << "Pilih (1-8): ";
+=======
+        cout << "7. Keluar\n";
+        cout << "Pilih (1-7): ";
+>>>>>>> 054cfa1298b427ae94852899a88c6df732933124
         if (!(cin >> pilihan)) {
             cerr << "Input harus berupa angka.\n";
             return 1;
@@ -293,7 +301,11 @@ int main() {
                 cout << "Pemesanan tidak ditemukan.\n";
             }
         } else if (pilihan == 4) {
+<<<<<<< HEAD
             bubbleSortDurasi(ps, jumlahPemesanan);
+=======
+                bubbleSortDurasi(ps, jumlahPemesanan);
+>>>>>>> 054cfa1298b427ae94852899a88c6df732933124
         } else if (pilihan == 5) {
             int targetID;
             cout << "Masukkan ID pemesanan: ";
@@ -306,6 +318,7 @@ int main() {
             }
         } else if (pilihan == 6) {
             tampilkanStatistik(ps, jumlahPemesanan);
+<<<<<<< HEAD
         } else if (pilihan == 7) {                       // [BARU]
             tampilkanOverload(ov, jumlahOverload);
         } else if (pilihan == 8) {                       // [DIUBAH]
@@ -314,6 +327,14 @@ int main() {
             cout << "Pilihan tidak valid.\n";
         }
     } while (pilihan != 8);
+=======
+        } else if (pilihan == 7) {
+            cout << "Terima kasih telah menggunakan sistem ini... Jangan lupa untuk memesan lagi yaaa.\n";
+        } else if (pilihan != 7) {
+            cout << "Pilihan tidak valid.\n";
+        }
+    } while (pilihan != 7);
+>>>>>>> 054cfa1298b427ae94852899a88c6df732933124
 
     return 0;
 }
