@@ -5,7 +5,7 @@
 #include <limits>
 using namespace std;
 
-struct Pemesanan { //custom data type untuk pemesanan atau dideclare sebagai ps 
+struct Pemesanan { // custom data type untuk pemesanan atau dideclare sebagai ps 
     string namaPemesan; 
     string ID;
     int IDruang;
@@ -23,9 +23,8 @@ string buatIDPemesanan(int jumlahData) {
     return formatID.str();
 }
 
-void datapemesanan(Pemesanan pemesanan[], int& jumlah, const int maks) { 
-   
-    if (jumlah >= maks) { //berfungsi saat banyak data yang disimpan melebihi kapasitas atau overload. 
+void datapemesanan(Pemesanan pemesanan[], int& jumlah, const int maks, Pemesanan overCapacity[], int& jumlahOver) { 
+    if (jumlah >= maks) { // berfungsi saat banyak data yang disimpan melebihi kapasitas atau overload. 
         cout << "Tidak dapat menerima pesanan, karna pesanan sudah melebihi kapasitas maksimum.\n";
         return;
     }
@@ -56,29 +55,58 @@ void datapemesanan(Pemesanan pemesanan[], int& jumlah, const int maks) {
     pemesanan[jumlah].IDruang = pilihanRuang;
     pemesanan[jumlah].namaruangan = namaRuang[pilihanRuang - 1];
     pemesanan[jumlah].kapasitasruangan = kapasitas[pilihanRuang - 1];
+    
     cout << "Jumlah anggota: ";
     cin >> pemesanan[jumlah].jumlahAnggota;
 
     pemesanan[jumlah].statuskapasitas = pemesanan[jumlah].jumlahAnggota <= pemesanan[jumlah].kapasitasruangan;
+    
+    // Cek dan simpan langsung ke overCapacity jika melebihi kapasitas
     if (!pemesanan[jumlah].statuskapasitas) {
-        cerr << "\n[ERROR] Pesanan ditolak karena jumlah anggota (" << pemesanan[jumlah].jumlahAnggota << ") melebihi kapasitas ruangan ("  << pemesanan[jumlah].kapasitasruangan << ")!\nSilahkan coba lagi.\n\n";
+        cerr << "\n[ERROR] Pesanan ditolak karena jumlah anggota (" << pemesanan[jumlah].jumlahAnggota 
+             << ") melebihi kapasitas ruangan (" << pemesanan[jumlah].kapasitasruangan << ")!\n";
+        
+        if (jumlahOver < maks) {
+            overCapacity[jumlahOver] = pemesanan[jumlah]; 
+            overCapacity[jumlahOver].ID = "OV-" + buatIDPemesanan(jumlahOver); 
+            overCapacity[jumlahOver].durasi = 0; // Belum sempat input durasi
+            overCapacity[jumlahOver].prioritas = "Ditolak (Over Capacity)";
+            jumlahOver++;
+            cout << "[INFO] Data percobaan pemesanan over capacity telah dicatat ke sistem.\n\n";
+        }
         return;
     }
+
     cout << "Durasi pemesanan (menit): ";
     cin >> pemesanan[jumlah].durasi;
     
     cin.ignore();
 
     cout << "Prioritas/kegunaan: ";
-    getline (cin, pemesanan[jumlah].prioritas);
+    getline(cin, pemesanan[jumlah].prioritas);
 
-    pemesanan[jumlah].statuskapasitas = pemesanan[jumlah].jumlahAnggota <= pemesanan[jumlah].kapasitasruangan;
-    if (pemesanan[jumlah].statuskapasitas) {
-        cout << "Pesanan diterima. ID pemesanan: " << pemesanan[jumlah].ID << "\n";
-    } else {
-        cout << "Pesanan ditolak di karenakan jumlah anggota melebihi kapasitas ruangan.\n";
-    }
+    cout << "Pesanan diterima. ID pemesanan: " << pemesanan[jumlah].ID << "\n";
     ++jumlah;
+}
+
+void tampilkanOverCapacity(const Pemesanan overCapacity[], int jumlahOver) {
+    cout << "\n================================\n";
+    cout << "DATA PEMESANAN OVER CAPACITY\n";
+    cout << "================================\n";
+    if (jumlahOver == 0) {
+        cout << "Belum ada data pemesanan yang melebihi kapasitas.\n\n";
+        return;
+    }
+
+    for (int i = 0; i < jumlahOver; ++i) {
+        int selisih = overCapacity[i].jumlahAnggota - overCapacity[i].kapasitasruangan;
+        cout << "Data ke-" << i + 1 << "\n"
+             << "- ID Log         : " << overCapacity[i].ID << "\n"
+             << "- Nama Pemesan   : " << overCapacity[i].namaPemesan << "\n"
+             << "- Ruangan Dipilih: " << overCapacity[i].namaruangan << " (Maks: " << overCapacity[i].kapasitasruangan << " orang)\n"
+             << "- Jumlah Anggota : " << overCapacity[i].jumlahAnggota << " orang (Kelebihan " << selisih << " orang)\n"
+             << "- Status         : " << overCapacity[i].prioritas << "\n\n";
+    }
 }
 
 void cariPemesanan(const Pemesanan pemesanan[], int jumlahPemesanan) {
@@ -211,100 +239,108 @@ void tampilkanStatistik(const Pemesanan pemesanan[], int jumlahPemesanan) {
 int main() {
     const int maks = 100;
     Pemesanan pemesanan[maks];
+    Pemesanan overCapacity[maks]; 
     int jumlahPemesanan = 0;
+    int jumlahOver = 0;
     int pilihan = 0;
 
-   do {
-    cout << "================================\n";
-    cout << "\tSMART CAMPUS BOOKING SYSTEM UGM\n";
-    cout << "1. Tambah pemesanan\n";
-    cout << "2. Tampilkan semua pemesanan\n";
-    cout << "3. Cari pemesanan berdasarkan ID\n";
-    cout << "4. Urutkan Data Pemesanan (Manual Sort)\n";
-    cout << "5. Cari Data Pemesanan (Manual Search)\n";
-    cout << "6. Analisis Statistik & Total Durasi (Rekursif)\n";
-    cout << "7. Keluar\n";
-    cout << "Pilih (1-7): ";
+    do {
+        cout << "================================\n";
+        cout << "\tSMART CAMPUS BOOKING SYSTEM UGM\n";
+        cout << "1. Tambah pemesanan\n";
+        cout << "2. Tampilkan semua pemesanan\n";
+        cout << "3. Cari pemesanan berdasarkan ID\n";
+        cout << "4. Urutkan Data Pemesanan (Manual Sort)\n";
+        cout << "5. Cari Data Pemesanan (Manual Search)\n";
+        cout << "6. Analisis Statistik & Total Durasi (Rekursif)\n";
+        cout << "7. Tampilkan Data Pemesanan Over Capacity\n";
+        cout << "8. Keluar\n";
+        cout << "Pilih (1-8): ";
 
-    if (!(cin >> pilihan)) {
-        cerr << "Input harus berupa angka.\n";
-        return 1;
-    }
+        if (!(cin >> pilihan)) {
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+            cout << "Input harus berupa angka! Silakan coba lagi.\n\n";
+            continue; 
+        }
 
-    switch (pilihan) {
-        case 1:
-            datapemesanan(pemesanan, jumlahPemesanan, maks);
-            break;
 
-        case 2:
-            for (int i = 0; i < jumlahPemesanan; ++i) {
-                cout << "ID: " << pemesanan[i].ID
-                     << ", Pemesan: " << pemesanan[i].namaPemesan
-                     << ", Ruangan: " << pemesanan[i].namaruangan
-                     << ", Anggota: " << pemesanan[i].jumlahAnggota
-                     << ", Durasi: " << pemesanan[i].durasi
-                     << " menit, Prioritas: " << pemesanan[i].prioritas
-                     << ", Kapasitas: "
-                     << (pemesanan[i].statuskapasitas
-                             ? "mencukupi"
-                             : "tidak mencukupi")
-                     << '\n';
-            }
-            break;
+        switch (pilihan) {
+            case 1:
+                datapemesanan(pemesanan, jumlahPemesanan, maks, overCapacity, jumlahOver);
+                break;
 
-        case 3: {
-            string idCari;
-            bool ditemukan = false;
-
-            cout << "Masukkan ID pemesanan: ";
-            cin >> idCari;
-
-            for (int i = 0; i < jumlahPemesanan; ++i) {
-                if (pemesanan[i].ID == idCari) {
-                    cout << "Pemesanan ditemukan: "
-                         << pemesanan[i].namaPemesan << " - "
-                         << pemesanan[i].namaruangan << ", "
-                         << pemesanan[i].durasi << " menit\n";
-                    ditemukan = true;
-                    break;
+            case 2:
+                for (int i = 0; i < jumlahPemesanan; ++i) {
+                    cout << "ID: " << pemesanan[i].ID
+                         << ", Pemesan: " << pemesanan[i].namaPemesan
+                         << ", Ruangan: " << pemesanan[i].namaruangan
+                         << ", Anggota: " << pemesanan[i].jumlahAnggota
+                         << ", Durasi: " << pemesanan[i].durasi
+                         << " menit, Prioritas: " << pemesanan[i].prioritas
+                         << ", Kapasitas: "
+                         << (pemesanan[i].statuskapasitas
+                                 ? "mencukupi"
+                                 : "tidak mencukupi")
+                         << '\n';
                 }
+                break;
+
+            case 3: {
+                string idCari;
+                bool ditemukan = false;
+
+                cout << "Masukkan ID pemesanan: ";
+                cin >> idCari;
+
+                for (int i = 0; i < jumlahPemesanan; ++i) {
+                    if (pemesanan[i].ID == idCari) {
+                        cout << "Pemesanan ditemukan: "
+                             << pemesanan[i].namaPemesan << " - "
+                             << pemesanan[i].namaruangan << ", "
+                             << pemesanan[i].durasi << " menit\n";
+                        ditemukan = true;
+                        break;
+                    }
+                }
+
+                if (!ditemukan) {
+                    cout << "Pemesanan tidak ditemukan.\n";
+                }
+                break;
             }
 
-            if (!ditemukan) {
-                cout << "Pemesanan tidak ditemukan.\n";
+            case 4:
+                bubbleSortDurasi(pemesanan, jumlahPemesanan);
+                break;
+
+            case 5: {
+                string targetID;
+
+                cout << "Masukkan ID pemesanan: ";
+                cin >> targetID;
+                linearSearchID(pemesanan, jumlahPemesanan, targetID);
+                break;
             }
-            break;
+
+            case 6:
+                tampilkanStatistik(pemesanan, jumlahPemesanan);
+                break;
+
+            case 7:
+                tampilkanOverCapacity(overCapacity, jumlahOver);
+                break;
+
+            case 8:
+                cout << "Terima kasih telah menggunakan sistem ini... "
+                     << "Jangan lupa untuk memesan lagi yaaa.\n";
+                break;
+
+            default:
+                cout << "Pilihan tidak valid.\n";
+                break;
         }
-
-        case 4:
-            bubbleSortDurasi(pemesanan, jumlahPemesanan);
-            break;
-
-        case 5: {
-            string targetID;
-
-            cout << "Masukkan ID pemesanan: ";
-            cin >> targetID;
-            linearSearchID(pemesanan, jumlahPemesanan, targetID);
-            break;
-        }
-
-        case 6:
-            tampilkanStatistik(pemesanan, jumlahPemesanan);
-            break;
-
-        case 7:
-            cout << "Terima kasih telah menggunakan sistem ini... "
-                 << "Jangan lupa untuk memesan lagi yaaa.\n";
-            break;
-
-        default:
-            cout << "Pilihan tidak valid.\n";
-            break;
-    }
-} while (pilihan != 7);
-
-return 0;
+    } while (pilihan != 8);
 
     return 0;
 }
