@@ -261,14 +261,16 @@ Folder [`docs/`](docs/) berisi dokumentasi proyek:
 
 ---
 
-## 👤 Pembuat
+##  Kreator
 
-**Faiz Falah Fauzian, Muhammad Fahri Ramadhan, Muhammad Faiz Harry Saputra, Beverly Yufuai**
-Mahasiswa Ilmu Komputer, semester 1
+**Faiz Falah Fauzian, Muhammad Fahri Ramadhan, Muhammad Faiz Harry Saputra, Beverly Yufuai, dengan bantuan Kecerdasan Buatan.**
+
+Mahasiswa Ilmu Komputer Universitas Gadjah Mada, semester 1.
+
 Repository Project: (https://github.com/faizfalahfauzian/komd-kelompok-1)
 
 ---
 
-## 📄 Lisensi
+## Lisensi
 
 Proyek ini dibuat untuk keperluan Mata Kuliah Praktikum Pemrograman kelas KOMD
