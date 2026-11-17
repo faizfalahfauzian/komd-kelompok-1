@@ -34,6 +34,7 @@ string tentukanPrioritas(int durasi) {
         return "Tinggi";
     }
 }
+
 int skorPrioritas(const string& prioritas) {
     if (prioritas == "Tinggi") return 3;
     if (prioritas == "Sedang") return 2;
