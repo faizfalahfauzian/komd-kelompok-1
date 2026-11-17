@@ -12,16 +12,11 @@ struct pemesanan { //custom data type untuk pemesanan atau dideclare sebagai ps
     int durasi;
     string prioritas;
     bool statuskapasitas;
-};
+    int kelebihan;         
 
-void datapemesanan(pemesanan ps[], int& jumlah, const int maks) { //menggunakan tipe data void karna tidak mengembalikan nilai saat di call di fungsi main 
-   //int& jumlah (pass by reference) digunakan untuk mengubah nilai jumlah di fungsi main, sehingga setiap kali pemesanan baru ditambahkan, jumlah akan diperbarui secara langsung.
-   
-   
-    if (jumlah >= maks) { //berfungsi saat banyak data yang disimpan melebihi kapasitas atau overload. 
-        cout << "Tidak dapat menerima pesanan, karna pesanan sudah melebihi kapasitas maksimum.\n";
-        return;
-    }
+// [DIUBAH] sekarang menerima array overload (ov) dan jumlahOverload
+void datapemesanan(pemesanan ps[], int& jumlah, const int maks,
+                   pemesanan ov[], int& jumlahOverload) {
 
     const string namaRuang[] = {
         "Ruang Diskusi 1", "Ruang Diskusi 2", "Ruang Diskusi 3",
@@ -30,10 +25,14 @@ void datapemesanan(pemesanan ps[], int& jumlah, const int maks) { //menggunakan 
     const int kapasitas[] = {10, 20, 25, 35, 100, 40, 30};
     int pilihanRuang;
 
+    // [BARU] data diisi dulu ke variabel sementara, baru dipindah ke
+    // array normal (ps) atau array overload (ov) sesuai kapasitas
+    pemesanan p;
+
     cout << "Nama Pemesan: ";
-    cin >> ps[jumlah].namaPemesan;
+    cin >> p.namaPemesan;
     cout << "Masukkan ID pemesanan: ";
-    cin >> ps[jumlah].ID;
+    cin >> p.ID;
 
     cout << "Pilih ruangan (1-7):\n";
     for (int i = 0; i < 7; ++i) {
@@ -45,32 +44,46 @@ void datapemesanan(pemesanan ps[], int& jumlah, const int maks) { //menggunakan 
         return;
     }
 
-    ps[jumlah].IDruang = pilihanRuang;
-    ps[jumlah].namaruangan = namaRuang[pilihanRuang - 1];
-    ps[jumlah].kapasitasruangan = kapasitas[pilihanRuang - 1];
+    p.IDruang = pilihanRuang;
+    p.namaruangan = namaRuang[pilihanRuang - 1];
+    p.kapasitasruangan = kapasitas[pilihanRuang - 1];
     cout << "Jumlah anggota: ";
-    cin >> ps[jumlah].jumlahAnggota;
+    cin >> p.jumlahAnggota;
 
-    ps[jumlah].statuskapasitas = ps[jumlah].jumlahAnggota <= ps[jumlah].kapasitasruangan;
-    if (!ps[jumlah].statuskapasitas) {
-        cerr << "\n[ERROR] Pesanan ditolak karena jumlah anggota (" << ps[jumlah].jumlahAnggota << ") melebihi kapasitas ruangan ("  << ps[jumlah].kapasitasruangan << ")!\nSilahkan coba lagi.\n\n";
+    p.statuskapasitas = p.jumlahAnggota <= p.kapasitasruangan;
+    p.kelebihan = p.statuskapasitas ? 0 : p.jumlahAnggota - p.kapasitasruangan;
+
+    // [BARU] cek ketersediaan tempat penyimpanan sesuai jenis pesanan
+    if (p.statuskapasitas && jumlah >= maks) {
+        cout << "Tidak dapat menerima pesanan, karna pesanan sudah melebihi kapasitas maksimum.\n";
         return;
     }
+    if (!p.statuskapasitas && jumlahOverload >= maks) {
+        cout << "Penyimpanan data overload sudah penuh.\n";
+        return;
+    }
+
     cout << "Durasi pemesanan (menit): ";
-    cin >> ps[jumlah].durasi;
-    
+    cin >> p.durasi;
+
     cin.ignore();
 
     cout << "Prioritas/kegunaan: ";
-    getline (cin, ps[jumlah].prioritas);
+    getline(cin, p.prioritas);
 
-    ps[jumlah].statuskapasitas = ps[jumlah].jumlahAnggota <= ps[jumlah].kapasitasruangan;
-    if (ps[jumlah].statuskapasitas) {
+    if (p.statuskapasitas) {
+        ps[jumlah] = p;
+        ++jumlah;
         cout << "Pesanan diterima.\n";
     } else {
-        cout << "Pesanan ditolak di karenakan jumlah anggota melebihi kapasitas ruangan.\n";
+        // [BARU] sistem overload capacity: pesanan tidak dibuang, tapi disimpan terpisah
+        ov[jumlahOverload] = p;
+        ++jumlahOverload;
+        cerr << "\n[OVERLOAD] Jumlah anggota (" << p.jumlahAnggota
+             << ") melebihi kapasitas ruangan (" << p.kapasitasruangan
+             << ") sebanyak " << p.kelebihan << " orang.\n"
+             << "Pesanan tidak diproses, tetapi disimpan di data overload capacity.\n\n";
     }
-    ++jumlah;
 }
 
 void cariPemesanan(const pemesanan ps[], int jumlahPemesanan) {
@@ -112,6 +125,28 @@ void tampilkanDaftar(const pemesanan ps[], int jumlahPemesanan) {
              << "- Durasi       : " << ps[i].durasi << " menit\n"
              << "- Prioritas    : " << ps[i].prioritas << "\n\n";
     }
+}
+
+// [BARU] menampilkan data pesanan yang overload capacity
+void tampilkanOverload(const pemesanan ov[], int jumlahOverload) {
+    if (jumlahOverload == 0) {
+        cout << "Belum ada data overload capacity.\n\n";
+        return;
+    }
+    cout << "========== DATA OVERLOAD CAPACITY ==========\n";
+    for (int i = 0; i < jumlahOverload; ++i) {
+        cout << "Data ke-" << i + 1 << "\n"
+             << "- ID           : " << ov[i].ID << "\n"
+             << "- Nama pemesan : " << ov[i].namaPemesan << "\n"
+             << "- Ruangan      : " << ov[i].namaruangan << "\n"
+             << "- Kapasitas    : " << ov[i].kapasitasruangan << " orang\n"
+             << "- Anggota      : " << ov[i].jumlahAnggota << " orang\n"
+             << "- Kelebihan    : " << ov[i].kelebihan << " orang\n"
+             << "- Durasi       : " << ov[i].durasi << " menit\n"
+             << "- Prioritas    : " << ov[i].prioritas << "\n\n";
+    }
+    cout << "Total pesanan overload: " << jumlahOverload << "\n";
+    cout << "============================================\n\n";
 }
 
 void bubbleSortDurasi(pemesanan ps[], int jumlahPemesanan) {
@@ -208,11 +243,13 @@ void tampilkanStatistik(pemesanan ps[], int jumlahPemesanan) {
 int main() {
     const int maks = 100;
     pemesanan ps[maks];
+    pemesanan ov[maks];          
     int jumlahPemesanan = 0;
+    int jumlahOverload = 0;      
     int pilihan = 0;
 
     do {
-        cout << "================================\n";
+        cout << "===================================================\n";
         cout << "\tSMART CAMPUS BOOKING SYSTEM UGM\n";
         cout << "1. Tambah pemesanan\n";
         cout << "2. Tampilkan semua pemesanan\n";
@@ -220,15 +257,17 @@ int main() {
         cout << "4. Urutkan Data Pemesanan (Manual Sort)\n";
         cout << "5. Cari Data Pemesanan (Manual Search)\n";
         cout << "6. Analisis Statistik & Total Durasi (Rekursif)\n";
-        cout << "7. Keluar\n";
-        cout << "Pilih (1-7): ";
+        cout << "7. Data Overload Capacity\n";
+        cout << "8. Keluar\n";                   
+        cout << "===================================================\n";
+        cout << "Pilih (1-8): ";
         if (!(cin >> pilihan)) {
             cerr << "Input harus berupa angka.\n";
             return 1;
         }
 
         if (pilihan == 1) {
-            datapemesanan(ps, jumlahPemesanan, maks);
+            datapemesanan(ps, jumlahPemesanan, maks, ov, jumlahOverload);
         } else if (pilihan == 2) {
             for (int i = 0; i < jumlahPemesanan; ++i) {
                 cout << "ID: " << ps[i].ID << ", Pemesan: " << ps[i].namaPemesan
@@ -254,7 +293,7 @@ int main() {
                 cout << "Pemesanan tidak ditemukan.\n";
             }
         } else if (pilihan == 4) {
-                bubbleSortDurasi(ps, jumlahPemesanan);
+            bubbleSortDurasi(ps, jumlahPemesanan);
         } else if (pilihan == 5) {
             int targetID;
             cout << "Masukkan ID pemesanan: ";
@@ -267,12 +306,14 @@ int main() {
             }
         } else if (pilihan == 6) {
             tampilkanStatistik(ps, jumlahPemesanan);
-        } else if (pilihan == 7) {
+        } else if (pilihan == 7) {                       // [BARU]
+            tampilkanOverload(ov, jumlahOverload);
+        } else if (pilihan == 8) {                       // [DIUBAH]
             cout << "Terima kasih telah menggunakan sistem ini... Jangan lupa untuk memesan lagi yaaa.\n";
-        } else if (pilihan != 7) {
+        } else {
             cout << "Pilihan tidak valid.\n";
         }
-    } while (pilihan != 7);
+    } while (pilihan != 8);
 
     return 0;
 }
